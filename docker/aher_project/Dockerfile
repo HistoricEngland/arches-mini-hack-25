@@ -5,6 +5,7 @@ USER root
 ARG PROJ_NAME=project
 ARG ARCHES_PATH=./arches
 ARG ARCHES_HER_PATH=./arches_her
+ARG PROJECT_PATH=./aher_project
 ARG DOCKER_PATH=./aher_project/docker/aher_project/docker
 
 ## Setting default environment variables
@@ -73,6 +74,7 @@ RUN npm install -g yarn && apt install wait-for-it
 RUN rm -rf /root/.cache/pip/*
 
 # COPY CODE BASE
+COPY $PROJECT_PATH ${APP_ROOT}
 
 # Arches
 COPY $ARCHES_PATH ${ARCHES_ROOT}
@@ -87,6 +89,10 @@ RUN pip install --upgrade pip setuptools wheel
 # Install arches_her app locally
 WORKDIR ${AHER_ROOT}
 RUN pip install -e .
+
+# Install ahers_project requirements
+WORKDIR ${APP_ROOT}
+RUN pip install -r ./install/requirements.txt
 
 # Need to install arches again to map to local code base
 WORKDIR ${ARCHES_ROOT}
