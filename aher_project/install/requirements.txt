@@ -1,1 +1,1 @@
-arches==
+pgvector==0.3.6
