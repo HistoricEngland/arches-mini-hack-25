@@ -12,7 +12,7 @@ You need to use the Dockerfile at the path `aher_project/docker_db/Dockerfile`.
 
 In VSCode you can right click and "Build Image" and provide the tag `minihack25_pgsql:pg14_pgv080` when prompted.
 
-alternativey, with a command line prompt at the root of your workspace, run the following:
+Alternatively, with a command line prompt at the root of your workspace, run the following:
 
 ```sh
 docker build --pull --rm -f 'aher_project/docker_db/Dockerfile' -t 'minihack25_pgsql:pg14_pgv080' 'aher_project/docker_db'
