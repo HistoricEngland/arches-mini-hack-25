@@ -1,0 +1,16 @@
+*.pyc
+*.log
+aher_project/logs
+aher_project/export_deliverables
+aher_project/cantaloupe/*
+aher_project/staticfiles
+aher_project/media/packages
+aher_project/media/node_modules
+aher_project/media/build/*
+aher_project/uploadedfiles/*
+aher_project/settings_local.py
+aher_project/webpack/webpack-stats.json
+aher_project/webpack/webpack-user-config.js
+.vscode/
+CACHE
+doc_store
