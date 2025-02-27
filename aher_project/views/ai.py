@@ -49,3 +49,13 @@ class AIAPIView(View):
                 
         if len(results) > 0:
             return results
+        
+        
+class ChatAPIView(View):
+    
+    def get(self, request):
+        response = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean a interdum nibh, eget semper nunc. Donec pharetra, risus ac ornare volutpat, dolor mauris finibus sapien, quis sagittis nunc augue ut ipsum. Nunc eu tortor vitae enim blandit facilisis quis ultricies sapien. Proin tempor pharetra est, ut imperdiet tellus eleifend non. Vestibulum id pulvinar ex. Sed elit leo, maximus sit amet sem quis, finibus auctor metus. Donec sit amet ligula nec lectus malesuada feugiat ut sed nulla. Pellentesque cursus pulvinar elit, id dapibus felis rutrum in. Fusce pulvinar lectus vitae urna dapibus, at ultricies turpis ultrices. Integer luctus congue pharetra. Proin quis lorem in libero interdum ultricies quis ut massa. Donec venenatis, enim a pulvinar tincidunt, ligula sem tempor enim, ut commodo arcu mauris ornare turpis. Suspendisse placerat varius sapien, quis pretium turpis semper sit amet. Sed dapibus finibus venenatis. Vestibulum viverra, dui et interdum cursus, lectus mi pharetra nisl, eget dictum tellus eros vel dolor. Sed purus tortor, rutrum id efficitur sed, rhoncus et ante. Aliquam a vehicula metus. Mauris pharetra nisl lorem, in dignissim erat iaculis semper. Aenean lacinia metus justo, eu mollis mauris consequat eget. Vestibulum condimentum porttitor quam, non lacinia dui tempus ac. In cursus sem vel."
+        return JsonResponse({"message": response}, status=200)
+
+    def post(self, request):
+        return JsonResponse({"message": "This is a blank API view"}, status=200)
