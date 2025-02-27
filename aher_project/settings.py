@@ -24,7 +24,7 @@ APP_ROOT = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe(
 MIN_ARCHES_VERSION = arches.__version__
 MAX_ARCHES_VERSION = arches.__version__
 
-MAPBOX_API_KEY = "pk.eyJ1IjoiaGlzdG9yaWN1bmNsZSIsImEiOiJjbGhnZDk2cWwwMG5zM2ZwcmNxdmJiNzBxIn0.5ilaKRKdBSPHkOtnr3KcKw" 
+#MAPBOX_API_KEY = "" 
 
 TIMEWHEEL_DATE_TIERS = {
     "name": "Millennium",
