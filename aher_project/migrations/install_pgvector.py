@@ -1,6 +1,7 @@
 # create a django migration that installes the pgvector extension
 
 from django.db import migrations
+from pgvector.django import VectorExtension
 
 class Migration(migrations.Migration):
     
@@ -9,8 +10,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunSQL(
-            sql='CREATE EXTENSION IF NOT EXISTS vector;',
-            reverse_sql='DROP EXTENSION IF EXISTS vector;'
-        )
+        VectorExtension()
     ]
