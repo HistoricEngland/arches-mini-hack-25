@@ -2,6 +2,7 @@ from django.views.generic import View
 from django.http import JsonResponse
 import requests
 import json
+from django.contrib.gis.geos import GEOSGeometry, WKTWriter
 
 class AIAPIView(View):
     
@@ -39,11 +40,17 @@ class AIAPIView(View):
 
                 if len(data["features"]) > 0:
                     for feature in data["features"]:
-                        feature_data = {}
-                        feature_data["geometry"] = feature["geometry"]
-                        feature_data["name"]= feature["properties"]["NAME"] 
-                        feature_data["description"] = feature["properties"]["DESCRIPTIO"]
-                        results.append(feature_data)
+                        geometry = feature["geometry"]
+                        if geometry:
+                            geometryGeos = GEOSGeometry(json.dumps(geometry))
+                            wkt_writer = WKTWriter()
+                            wkt_geometry = wkt_writer.write(geometryGeos).decode('utf-8') 
+                            
+                            feature_data = {}
+                            feature_data["geometry"] = wkt_geometry
+                            feature_data["name"]= feature["properties"]["NAME"] 
+                            feature_data["description"] = feature["properties"]["DESCRIPTIO"]
+                            results.append(feature_data)
             else:
                 print(f"Failed to retrieve data: {response.status_code}")
                 
