@@ -154,11 +154,11 @@ install_yarn_components() {
 
 #### Misc
 copy_settings_local() {
-	echo "Copying ${AHER_ROOT}/docker/aher_project/docker files to ${APP_FOLDER}/${ARCHES_PROJECT}..."
-	yes | cp ${AHER_ROOT}/docker/aher_project/docker/settings_local.py ${APP_FOLDER}/${ARCHES_PROJECT}/settings_local.py
-	yes | cp ${AHER_ROOT}/docker/aher_project/docker/settings.py ${APP_FOLDER}/${ARCHES_PROJECT}/settings.py
-	yes | cp ${AHER_ROOT}/docker/aher_project/docker/urls.py ${APP_FOLDER}/${ARCHES_PROJECT}/urls.py
-	yes | cp ${AHER_ROOT}/docker/aher_project/docker/package.json ${APP_FOLDER}/${ARCHES_PROJECT}/package.json
+	echo "Copying ${APP_ROOT}/docker/aher_project/docker files to ${APP_FOLDER}/${ARCHES_PROJECT}..."
+	yes | cp ${APP_ROOT}/docker/aher_project/docker/settings_local.py ${APP_FOLDER}/${ARCHES_PROJECT}/settings_local.py
+	yes | cp ${APP_ROOT}/docker/aher_project/docker/settings.py ${APP_FOLDER}/${ARCHES_PROJECT}/settings.py
+	yes | cp ${APP_ROOT}/docker/aher_project/docker/urls.py ${APP_FOLDER}/${ARCHES_PROJECT}/urls.py
+	yes | cp ${APP_ROOT}/docker/aher_project/docker/package.json ${APP_FOLDER}/${ARCHES_PROJECT}/package.json
 	
 }
 

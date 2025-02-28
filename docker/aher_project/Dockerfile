@@ -92,7 +92,7 @@ RUN pip install -e .
 
 # Install ahers_project requirements
 WORKDIR ${APP_ROOT}
-RUN pip install -r ./install/requirements.txt
+RUN pip install -r ./aher_project/install/requirements.txt
 
 # Need to install arches again to map to local code base
 WORKDIR ${ARCHES_ROOT}
