@@ -404,6 +404,23 @@ LANGUAGES = [
 # override this to permenantly display/hide the language switcher
 SHOW_LANGUAGE_SWITCH = len(LANGUAGES) > 1
 
+
+# Azure OpenAI Settings - overwrite in settings_local.py
+# AZURE_OPENAI_ENDPOINT = "https://your-resource.openai.azure.com/"
+# AZURE_OPENAI_KEY = "your-azure-key"
+# AZURE_OPENAI_API_VERSION = "2024-02-15-preview"
+# AZURE_OPENAI_EMBEDDING_DEPLOYMENT = "your-embedding-deployment-name"
+# AZURE_OPENAI_EMBEDDING_MODEL = "text-embedding-3-small"  # Default Azure OpenAI model
+# AZURE_OPENAI_LANGUAGE_MODEL = "gpt-4o-mini"  # Default Azure OpenAI language model
+
+# Ollama Settings
+# OLLAMA_BASE_URL = "http://localhost:11434"  # Default Ollama URL
+# OLLAMA_EMBEDDING_MODEL = "nomic-embed-text"  # Default Ollama model
+# OLLAMA_LANGUAGE_MODEL = "llama3.2:1b" # Default Ollama language model
+
+# Default provider setting
+# DEFAULT_EMBEDDING_PROVIDER = "azure"  # "azure" or "ollama"
+
 try:
     from .package_settings import *
 except ImportError:

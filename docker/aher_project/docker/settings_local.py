@@ -71,3 +71,20 @@ PUBLIC_SERVER_ADDRESS = f"http://{get_env_variable('PUBLIC_SERVER_PROJECT_NAME')
 HER_ROOT = os.path.join(get_env_variable('AHER_ROOT'), 'arches_her')
 
 MAPBOX_API_KEY = "pk.eyJ1IjoiaGlzdG9yaWN1bmNsZSIsImEiOiJjbGhnZDk2cWwwMG5zM2ZwcmNxdmJiNzBxIn0.5ilaKRKdBSPHkOtnr3KcKw" 
+
+
+# Azure OpenAI Settings - overwrite in settings_local.py
+AZURE_OPENAI_ENDPOINT = get_env_variable("AZURE_OPENAI_ENDPOINT")
+AZURE_OPENAI_KEY = get_env_variable("AZURE_OPENAI_KEY")
+AZURE_OPENAI_API_VERSION = get_env_variable("AZURE_OPENAI_API_VERSION")
+AZURE_OPENAI_EMBEDDING_DEPLOYMENT = get_env_variable("AZURE_OPENAI_EMBEDDING_DEPLOYMENT")
+AZURE_OPENAI_EMBEDDING_MODEL = get_env_variable("AZURE_OPENAI_EMBEDDING_MODEL")
+AZURE_OPENAI_LANGUAGE_MODEL = get_env_variable("AZURE_OPENAI_LANGUAGE_MODEL")
+
+# Ollama Settings
+OLLAMA_BASE_URL = get_env_variable("OLLAMA_BASE_URL")  # Default Ollama URL
+OLLAMA_EMBEDDING_MODEL= get_env_variable("OLLAMA_EMBEDDING_MODEL")  # Default Ollama model
+OLLAMA_LANGUAGE_MODEL = get_env_variable("OLLAMA_LANGUAGE_MODEL") # Default Ollama language model
+
+# Default provider setting
+DEFAULT_EMBEDDING_PROVIDER = "ollama"  # "azure" or "ollama"
