@@ -65,7 +65,7 @@ class AIAPIView(View):
             options = []
             
             for result in results:
-                options.append(result["name"])    
+                options.append(result["name"] + " (" + result["description"] + ")")    
                         
             return {"results": results,
                     "return_prompt": "Multiple results found.  Which of the following areas would you like us to use?  " + ', '.join(options)}
