@@ -3,6 +3,9 @@ from django.http import JsonResponse
 import requests
 import json
 from django.contrib.gis.geos import GEOSGeometry, WKTWriter
+import datetime
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator  # Add this line
 
 class AIAPIView(View):
     
@@ -58,7 +61,7 @@ class AIAPIView(View):
         if len(results) > 0:
             return results
         
-        
+@method_decorator(csrf_exempt, name='dispatch')        
 class ChatAPIView(View):
     
     def get(self, request):
@@ -66,4 +69,72 @@ class ChatAPIView(View):
         return JsonResponse({"message": response}, status=200)
 
     def post(self, request):
-        return JsonResponse({"message": "This is a blank API view"}, status=200)
+        """
+        - Request body structure
+        {
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "Hello, I need information about Camden."
+                },
+                {
+                    "role": "assistant",
+                    "content": "I can help you with information about Camden. What would you like to know?"
+                },
+                {
+                    "role": "user",
+                    "content": "What are the boundaries of Camden?"
+                }
+            ]
+        }
+        - Response body
+        {
+            "message": {
+                "role": "assistant",
+                "content": "Here is information about Camden's boundaries...",
+                "timestamp": "2025-02-28T14:30:00Z"
+            },
+            "status": "success"
+        }
+        """
+        try:
+            data = json.loads(request.body)
+            messages = data.get('messages', [])
+
+            if not messages:
+                return JsonResponse({
+                    "status": "error",
+                    "message": "No messages provided"
+                }, status=400)
+
+            # Here you would process the messages with your AI model
+            # For now, returning a dummy response
+            response = {
+                "message": {
+                    "role": "assistant",
+                    "content": f"This is a placeholder response to the question: { messages[-1]['content'] }.",
+                    "timestamp": datetime.datetime.now().isoformat()
+                },
+                "status": "success"
+            }
+
+            return JsonResponse(response, status=200)
+
+        except json.JSONDecodeError:
+            return JsonResponse({
+                "status": "error",
+                "message": "Invalid JSON in request body"
+            }, status=400)
+        
+
+"""
+curl -X POST http://localhost:8002/chatapi/ -H 'Content-Type: application/json' -d '{"messages": [{"role": "user","content": "Hello, I need information about Camden."},{"role": "assistant",
+            "content": "I can help you with information about Camden. What would you like to know?"
+        },
+        {
+            "role": "user",
+            "content": "What are the boundaries of Camden?"
+        }
+    ]
+}'
+"""
