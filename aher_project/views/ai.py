@@ -68,4 +68,4 @@ class AIAPIView(View):
                 options.append(result["name"])    
                         
             return {"results": results,
-                    "return_prompt": "Multiple results found.  Which of the following areas would you like us to use?" + str(options)}
+                    "return_prompt": "Multiple results found.  Which of the following areas would you like us to use?  " + ', '.join(options)}
