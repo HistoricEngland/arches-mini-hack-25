@@ -55,5 +55,17 @@ class AIAPIView(View):
             else:
                 print(f"Failed to retrieve data: {response.status_code}")
                 
-        if len(results) > 0:
+        if len(results) == 0:
+            return {"return_prompt": "No results found for the area you've asked for.  Please refine your criteria and try again."}
+        
+        elif len(results) == 1:
             return results
+        
+        elif len(results) > 1:
+            options = []
+            
+            for result in results:
+                options.append(result["name"])    
+                        
+            return {"results": results,
+                    "return_prompt": "Multiple results found.  Which of the following areas would you like us to use?" + str(options)}
