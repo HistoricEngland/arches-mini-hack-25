@@ -14,3 +14,5 @@ aher_project/webpack/webpack-user-config.js
 .vscode/
 CACHE
 doc_store
+private.env
+__pycache__
