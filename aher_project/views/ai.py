@@ -6,6 +6,7 @@ from django.contrib.gis.geos import GEOSGeometry, WKTWriter
 import datetime
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator  # Add this line
+from aher_project.ai_utils.chatcompletion import get_chat_provider, ChatFlow
 
 class AIAPIView(View):
     
@@ -73,16 +74,53 @@ class AIAPIView(View):
             return {"results": results,
                     "return_prompt": "Multiple results found.  Which of the following areas would you like us to use?  " + ', '.join(options)}
         
-@method_decorator(csrf_exempt, name='dispatch')        
+@method_decorator(csrf_exempt, name='dispatch')
 class ChatAPIView(View):
-    
-    def get(self, request):
-        response = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean a interdum nibh, eget semper nunc. Donec pharetra, risus ac ornare volutpat, dolor mauris finibus sapien, quis sagittis nunc augue ut ipsum. Nunc eu tortor vitae enim blandit facilisis quis ultricies sapien. Proin tempor pharetra est, ut imperdiet tellus eleifend non. Vestibulum id pulvinar ex. Sed elit leo, maximus sit amet sem quis, finibus auctor metus. Donec sit amet ligula nec lectus malesuada feugiat ut sed nulla. Pellentesque cursus pulvinar elit, id dapibus felis rutrum in. Fusce pulvinar lectus vitae urna dapibus, at ultricies turpis ultrices. Integer luctus congue pharetra. Proin quis lorem in libero interdum ultricies quis ut massa. Donec venenatis, enim a pulvinar tincidunt, ligula sem tempor enim, ut commodo arcu mauris ornare turpis. Suspendisse placerat varius sapien, quis pretium turpis semper sit amet. Sed dapibus finibus venenatis. Vestibulum viverra, dui et interdum cursus, lectus mi pharetra nisl, eget dictum tellus eros vel dolor. Sed purus tortor, rutrum id efficitur sed, rhoncus et ante. Aliquam a vehicula metus. Mauris pharetra nisl lorem, in dignissim erat iaculis semper. Aenean lacinia metus justo, eu mollis mauris consequat eget. Vestibulum condimentum porttitor quam, non lacinia dui tempus ac. In cursus sem vel."
-        return JsonResponse({"message": response}, status=200)
+    def post(self, request, *args, **kwargs):
+        try:
+            data = json.loads(request.body)
+            messages = data.get("messages", [])
+            if not messages:
+                return JsonResponse({"error": "No messages provided"}, status=400)
+            
+            chat_provider = get_chat_provider()
+            chat_flow = ChatFlow()
+            # Register any custom nodes here
+            # chat_flow.register_node(SomeCustomNode())
+            
 
-    def post(self, request):
-        """
-        - Request body structure
+            ######## Nodes that build the whereclause for the TileEmdbeddingDocument lookup
+            # Node to identify locations
+
+            # Node to fetch the geometry for the identified locations
+            # Node to build the whereclause for the TileEmbeddingDocument lookup
+
+            ###### Node to retrieve the TileEmbeddingDocument from the database
+            # Node to embedd the history of the conversation and pgvector query the TileEmbeddingDocument
+
+
+
+            ###### Nodes to check and refine the response
+            # Node to check if the response is valid - if not, ask for clarification - FINISH
+            
+            # Node is valid then summarise the response
+            # Node add sources to the response
+            # Node to format into Markdown
+
+            ############
+
+            updated_messages = chat_flow.execute(messages)
+            response = chat_provider.complete_chat(updated_messages)
+            formatted_response = chat_flow.format_output(response)
+            
+            return JsonResponse(formatted_response, status=200)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON"}, status=400)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    
+"""
+- Request body structure
         {
             "messages": [
                 {
@@ -108,45 +146,4 @@ class ChatAPIView(View):
             },
             "status": "success"
         }
-        """
-        try:
-            data = json.loads(request.body)
-            messages = data.get('messages', [])
-
-            if not messages:
-                return JsonResponse({
-                    "status": "error",
-                    "message": "No messages provided"
-                }, status=400)
-
-            # Here you would process the messages with your AI model
-            # For now, returning a dummy response
-            response = {
-                "message": {
-                    "role": "assistant",
-                    "content": f"This is a placeholder response to the question: { messages[-1]['content'] }.",
-                    "timestamp": datetime.datetime.now().isoformat()
-                },
-                "status": "success"
-            }
-
-            return JsonResponse(response, status=200)
-
-        except json.JSONDecodeError:
-            return JsonResponse({
-                "status": "error",
-                "message": "Invalid JSON in request body"
-            }, status=400)
-        
-
-"""
-curl -X POST http://localhost:8002/chatapi/ -H 'Content-Type: application/json' -d '{"messages": [{"role": "user","content": "Hello, I need information about Camden."},{"role": "assistant",
-            "content": "I can help you with information about Camden. What would you like to know?"
-        },
-        {
-            "role": "user",
-            "content": "What are the boundaries of Camden?"
-        }
-    ]
-}'
 """
