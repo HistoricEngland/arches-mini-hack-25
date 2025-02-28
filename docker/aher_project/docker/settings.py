@@ -421,6 +421,8 @@ SHOW_LANGUAGE_SWITCH = len(LANGUAGES) > 1
 # Default provider setting
 # DEFAULT_EMBEDDING_PROVIDER = "azure"  # "azure" or "ollama"
 
+# DOCUMENT_URL_PREFIX = f"http://localhost:8002/report/"
+
 try:
     from .package_settings import *
 except ImportError:

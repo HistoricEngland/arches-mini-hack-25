@@ -88,3 +88,5 @@ OLLAMA_LANGUAGE_MODEL = get_env_variable("OLLAMA_LANGUAGE_MODEL") # Default Olla
 
 # Default provider setting
 DEFAULT_EMBEDDING_PROVIDER = "ollama"  # "azure" or "ollama"
+
+DOCUMENT_URL_PREFIX = f"http://localhost:8002/report/"
