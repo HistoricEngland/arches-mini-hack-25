@@ -43,8 +43,9 @@ class AIAPIView(View):
                         geometry = feature["geometry"]
                         if geometry:
                             geometryGeos = GEOSGeometry(json.dumps(geometry))
+                            centroidPoint = geometryGeos.envelope.centroid
                             wkt_writer = WKTWriter()
-                            wkt_geometry = wkt_writer.write(geometryGeos).decode('utf-8') 
+                            wkt_geometry = wkt_writer.write(centroidPoint).decode('utf-8') 
                             
                             feature_data = {}
                             feature_data["geometry"] = wkt_geometry
