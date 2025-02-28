@@ -6,9 +6,9 @@ services:
       build:
         args:
           - "PROJ_NAME=aher_project"
-          - "DOCKER_PATH=./arches_her/docker/aher_project/docker"
+          - "DOCKER_PATH=./aher_project/docker/aher_project/docker"
         context: ../../..
-        dockerfile: ./arches_her/docker/aher_project/Dockerfile
+        dockerfile: ./aher_project/docker/aher_project/Dockerfile
       command: run_arches
       volumes:
         - ../../../arches:/web_root/arches
@@ -19,6 +19,7 @@ services:
         - ../../../aher_project-data:/web_root/aher_project_data
       env_file:
         - ./docker/env_file.env
+        - ./docker/private.env
       ports:
         - 8002:8000
         - 5678:5678
