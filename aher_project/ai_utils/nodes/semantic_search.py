@@ -54,7 +54,7 @@ class SemanticSearchNode(ChatFlowNode):
         )
 
         # Perform semantic search and get the top 20 tile embeddings
-        results = query.order_by(CosineDistance('embedding', query_embedding))[:10]  # Limit to top 5 results
+        results = query.order_by(CosineDistance('embedding', query_embedding))[:5]  # Limit to top 5 results
 
         # print the displaname and distance
         for result in results:
@@ -93,6 +93,8 @@ class SemanticSearchSummarizeNode(ChatFlowNode):
         # put the rag_results into a multi-line string with ewach doc seperated by 3 line breaks
         formatted_docs = "\n\n\n".join([doc["document"] for doc in rag_results])
         
+        return formatted_docs
+
         semenatic_search_prompt = f"""
             Rewrite the following collection of documents, which use JSON, into a readable format using the structure below. 
             For each document, captures the main points, key insights, and important details.
@@ -136,7 +138,7 @@ class SemanticSearchSummarizeNode(ChatFlowNode):
             print("+++++++++++++++++ No semantic_search_node results found in the flowdata.")
             return messages
         
-        # Summarize the results
+        # Summarize the results        
         summary = self.llm_summarize_messages(semantic_search_results)
         
         # Add the summary to the flowdata
@@ -168,14 +170,20 @@ class SemanticSearchResponseNode(ChatFlowNode):
         
         # Create prompt using semantic search results
         context = json.dumps(semantic_search_results, indent=2)
-        prompt = f"""Use the following context data retrieved from a semantic search of your database. to answer the user's question.
-        
-                    Context from semantic search:
+        prompt = f"""Use the following context data from your database, along with the chat history, to answer the user's question.
+
+                    - Do NOT use any information outside of the context provided.
+                    - If you don't have enough information to answer the question, you can say so.
+                    - Do not mention you are an AI or provide any other information about the system.
+                    - Do not provide any personal opinions or assumptions.
+                    - Simply answer the question based on the information provided.
+                    - If the answer is not found in the context, answer as best you can with the data you've been provided without lhying or making up informaiton.
+                    - Do not refer the context data provided, answer as if it was coming from your own knowledge.
+
+                    Context Data:
                     {context}
 
                     User's question: {last_user_message}
-
-                    Please provide a clear response using the relevant information from the context only.
         """
 
         # print prompt
