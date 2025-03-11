@@ -1,14 +1,18 @@
 import uuid, json
 from django.contrib.gis.db import models
 from django.db import connection
-from arches.app.models.models import TileModel, ResourceInstance
+from arches.app.models.models import TileModel
+from arches.app.models.resource import Resource
+from arches.app.models.system_settings import settings
 from pgvector.django import VectorField, HnswIndex
+from typing import List, Dict, Any
 
 from aher_project.ai_utils.embedding import get_embedder
 
 class TileEmbeddingDocument(models.Model):
     tileembeddingid = models.UUIDField(primary_key=True)
     tile = models.ForeignKey("models.TileModel", db_column="tileid", null=True, on_delete=models.CASCADE)
+    resourceinstance = models.ForeignKey(Resource, db_column="resourceinstanceid", null=True, on_delete=models.CASCADE)
     document = models.TextField()
     embedding = VectorField(dimensions=768)
 
@@ -50,6 +54,38 @@ class TileEmbeddingDocument(models.Model):
         ).order_by(
             'embedding__cosine_distance'
         )[:limit]
+
+    @classmethod
+    def aggregate_by_resource(cls, queryset: List[Any]) -> List[Any]:
+        """
+        Aggregate tile embeddings by resource instance.
+        
+        Args:
+            queryset: An iterable of TileEmbeddingDocument objects
+            
+        Returns:
+            dict: A dictionary where keys are resource instance IDs and values are dictionaries containing:
+                - documents: List of documents for that resource
+                - resourceinstance: Object containing resource details including name and description
+        """
+        aggregated = {}
+        
+        for embedding_doc in queryset:
+            resource_id = str(embedding_doc.resourceinstance.resourceinstanceid)
+            
+            if resource_id not in aggregated:
+                aggregated[resource_id] = {
+                    'order': 0, #embedding_doc.embedding__cosine_distance,
+                    'document': f"# Title: {embedding_doc.resourceinstance.displayname()}\n ## Summary Description: {embedding_doc.resourceinstance.displaydescription()}\n ## Content:",
+                    'document_source_url': f"{settings.PUBLIC_SERVER_ADDRESS}/report/{str(embedding_doc.resourceinstance.resourceinstanceid)}"
+                }
+            
+            aggregated[resource_id]['document'] = f"{aggregated[resource_id]['document']}\n\n{embedding_doc.document}"
+            aggregated[resource_id]['order'] += embedding_doc.distance
+
+        # convert aggregate dict to list
+        print(aggregated.values)
+        return list(aggregated.values())
 
 # add a class that extends TileModel to create a proxy model so a tile 
 

@@ -415,6 +415,10 @@ LANGUAGES = [
 #   ('es', _('Spanish')),
 ]
 
+# Default system prompt for chat
+DEFAULT_SYSTEM_PROMPT = """
+   You are a helpful assistant specialized in historical locations and heritage. Follow user requests carefully, consisely and provide clear, factual responses using the data provided.
+"""
 
 # Azure OpenAI Settings - overwrite in settings_local.py
 # AZURE_OPENAI_ENDPOINT = "https://your-resource.openai.azure.com/"

@@ -5,9 +5,16 @@ import json
 from django.contrib.gis.geos import GEOSGeometry, WKTWriter
 import datetime
 from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator  # Add this line
-from aher_project.ai_utils.chatcompletion import get_chat_provider, ChatFlow
+from django.utils.decorators import method_decorator
 
+from aher_project.ai_utils.chatcompletion import ChatFlowMessages, get_chat_provider, ChatFlow
+from aher_project.ai_utils.nodes.identify_locations import LocationExtractNode, LocationFilterNode
+from aher_project.ai_utils.nodes.semantic_search import (
+    SemanticSearchNode, 
+    SemanticSearchSummarizeNode,
+    SemanticSearchResponseNode
+)
+            
 class AIAPIView(View):
     
     def get(self, request):
@@ -85,33 +92,19 @@ class ChatAPIView(View):
             
             chat_provider = get_chat_provider()
             chat_flow = ChatFlow()
-            # Register any custom nodes here
-            # chat_flow.register_node(SomeCustomNode())
+
+            # Location-based context pipeline
+            chat_flow.register_node(LocationExtractNode())
+            chat_flow.register_node(LocationFilterNode())
             
-
-            ######## Nodes that build the whereclause for the TileEmdbeddingDocument lookup
-            # Node to identify locations
-
-            # Node to fetch the geometry for the identified locations
-            # Node to build the whereclause for the TileEmbeddingDocument lookup
-
-            ###### Node to retrieve the TileEmbeddingDocument from the database
-            # Node to embedd the history of the conversation and pgvector query the TileEmbeddingDocument
-
-
-
-            ###### Nodes to check and refine the response
-            # Node to check if the response is valid - if not, ask for clarification - FINISH
+            # Semantic search pipeline
+            chat_flow.register_node(SemanticSearchNode())
+            chat_flow.register_node(SemanticSearchSummarizeNode())
+            chat_flow.register_node(SemanticSearchResponseNode())  # Add the new response node
             
-            # Node is valid then summarise the response
-            # Node add sources to the response
-            # Node to format into Markdown
-
-            ############
-
-            updated_messages = chat_flow.execute(messages)
-            response = chat_provider.complete_chat(updated_messages)
-            formatted_response = chat_flow.format_output(response)
+            chat_messages = ChatFlowMessages(messages)
+            updated_messages = chat_flow.execute(chat_messages)
+            formatted_response = chat_flow.format_output(updated_messages)
             
             return JsonResponse(formatted_response, status=200)
         except json.JSONDecodeError:

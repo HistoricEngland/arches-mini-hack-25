@@ -96,7 +96,10 @@ class LocationFilterNode(ChatFlowNode):
                 feature["geometry"] = feature["geometry"].replace("POINT", "")
                 all_wkt_points.append(feature["geometry"])
 
-
+        if len(all_wkt_points) == 0:
+            print("No geometry found for the locations.")
+            return chat_messages
+        
         # convert the WKT Geometries to a muktipoint geometry
         geometry = "MULTIPOINT(" + ", ".join(all_wkt_points) + ")"
         whereclause = self.WHERECLAUSE_TEMPLATE.format(geometry=geometry)
@@ -130,7 +133,7 @@ def geometry_return(name_to_search: str) -> Dict[str, List]:
     
     results = []
     for number in featureservice_numbers:
-        print(f"Searching for {name_to_search} in featureservice {number}")
+        #print(f"Searching for {name_to_search} in featureservice {number}")
         
         current_url = base_url.format(number)
         response = requests.get(current_url)
@@ -139,9 +142,11 @@ def geometry_return(name_to_search: str) -> Dict[str, List]:
         if response.status_code == 200:
             # Parse the JSON response
             data = response.json()
-            print(data)
+            #print(data)
 
-            if len(data["features"]) > 0:
+            
+
+            if "features" in data.keys() and len(data["features"]) > 0:
                 for feature in data["features"]:
                     geometry = feature["geometry"]
                     if geometry:
