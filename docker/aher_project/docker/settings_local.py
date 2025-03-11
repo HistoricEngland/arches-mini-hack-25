@@ -75,11 +75,16 @@ MAPBOX_API_KEY = "pk.eyJ1IjoiaGlzdG9yaWN1bmNsZSIsImEiOiJjbGhnZDk2cWwwMG5zM2ZwcmN
 
 # Azure OpenAI Settings - overwrite in settings_local.py
 AZURE_OPENAI_ENDPOINT = get_env_variable("AZURE_OPENAI_ENDPOINT")
-AZURE_OPENAI_KEY = get_env_variable("AZURE_OPENAI_KEY")
+AZURE_OPENAI_API_KEY = get_env_variable("AZURE_OPENAI_API_KEY")
 AZURE_OPENAI_API_VERSION = get_env_variable("AZURE_OPENAI_API_VERSION")
+AZURE_OPENAI_CHAT_DEPLOYMENT = get_env_variable("AZURE_OPENAI_CHAT_DEPLOYMENT")
+AZURE_OPENAI_CHAT_MODEL = get_env_variable("AZURE_OPENAI_CHAT_MODEL")
+AZURE_OPENAI_LANGUAGE_MODEL = get_env_variable("AZURE_OPENAI_LANGUAGE_MODEL")
+
 AZURE_OPENAI_EMBEDDING_DEPLOYMENT = get_env_variable("AZURE_OPENAI_EMBEDDING_DEPLOYMENT")
 AZURE_OPENAI_EMBEDDING_MODEL = get_env_variable("AZURE_OPENAI_EMBEDDING_MODEL")
-AZURE_OPENAI_LANGUAGE_MODEL = get_env_variable("AZURE_OPENAI_LANGUAGE_MODEL")
+
+
 
 # Ollama Settings
 OLLAMA_BASE_URL = get_env_variable("OLLAMA_BASE_URL")  # Default Ollama URL
@@ -88,5 +93,5 @@ OLLAMA_LANGUAGE_MODEL = get_env_variable("OLLAMA_LANGUAGE_MODEL") # Default Olla
 
 # Default provider setting
 DEFAULT_EMBEDDING_PROVIDER = "ollama"  # "azure" or "ollama"
-
+DEFAULT_CHAT_PROVIDER = "azure"  # "azure" or "ollama"
 DOCUMENT_URL_PREFIX = f"http://localhost:8002/report/"

@@ -1,5 +1,5 @@
 from typing import List, Dict, Any, Optional
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import AzureChatOpenAI
 from langchain_community.chat_models import ChatOllama
 from arches.app.models.system_settings import settings
 
@@ -13,11 +13,10 @@ class ChatProvider:
     def _initialize_client(self):
         """Initialize the appropriate chat client based on provider."""
         if self.provider == "azure":
-            return ChatOpenAI(
-                azure_endpoint=settings.AZURE_OPENAI_ENDPOINT,
-                api_key=settings.AZURE_OPENAI_KEY,
+            return AzureChatOpenAI(
+                temperature=0,
                 api_version=settings.AZURE_OPENAI_API_VERSION,
-                deployment=settings.AZURE_OPENAI_CHAT_DEPLOYMENT,
+                deployment_name=settings.AZURE_OPENAI_CHAT_DEPLOYMENT,
                 model=settings.AZURE_OPENAI_CHAT_MODEL,
             )
         elif self.provider == "ollama":
@@ -134,6 +133,7 @@ class ChatFlowMessages:
         # add the last user message
         summary_message_history.append(self._original_messages[-1])
         return summary_message_history
+    
         
     
 
@@ -176,7 +176,8 @@ class ChatFlow:
 
 def get_chat_provider(provider: Optional[str] = None) -> ChatProvider:
     """Factory function to get a chat provider instance."""
-    provider = provider or getattr(settings, 'DEFAULT_CHAT_PROVIDER', 'ollama')
+    #provider = provider or getattr(settings, 'DEFAULT_CHAT_PROVIDER', 'ollama')
+    provider = provider or getattr(settings, 'DEFAULT_CHAT_PROVIDER', 'azure')
     return ChatProvider(provider)
 
 

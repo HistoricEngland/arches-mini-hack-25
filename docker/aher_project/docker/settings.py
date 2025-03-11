@@ -423,6 +423,12 @@ SHOW_LANGUAGE_SWITCH = len(LANGUAGES) > 1
 
 # DOCUMENT_URL_PREFIX = f"http://localhost:8002/report/"
 
+DEFAULT_SYSTEM_PROMPT = """
+    You are a helpful assistant specialized in historical locations and heritage. 
+    Follow user requests carefully, and provide clear, factual responses using the data provided.
+    Try to be professional, and avoid using slang or informal language.
+"""
+
 try:
     from .package_settings import *
 except ImportError:
