@@ -90,10 +90,10 @@ define([
                     }),
                     contentType: 'application/json',
                     success: function(response) {
-                        if (response && response.message) {
+                        if (response && response.response) {
                             self.messages.push({
                                 role: 'assistant',
-                                content: response.message.content
+                                content: response.response
                             });
                         }
                     },
