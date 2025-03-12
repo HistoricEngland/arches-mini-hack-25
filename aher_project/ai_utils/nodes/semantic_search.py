@@ -187,10 +187,10 @@ class SemanticSearchResponseNode(ChatFlowNode):
                     - If the answer is not found in the context, answer as best you can with the data you've been provided without lhying or making up informaiton.
                     - Do not refer the context data provided, answer as if it was coming from your own knowledge.
                     
-                    Add sources for the information you provide.
+                    You MUST ALWAYS add sources for the information you provide.
                     - Add all source urls for the documents that you used to answer the question at the bottom of the response in a bulleted list with a reference number.
                     - The url should be clickable in an HTML format, e.g.,<a target="_blank" href="https://www.example.com">[ref number] the document title </a>
-                    - Add the reference number for the source in the response where it was used.
+                    - You MUST add the reference number for the source in the response where it was used to generate content.
 
                     Context Data:
                     {context}
