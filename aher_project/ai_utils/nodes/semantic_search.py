@@ -189,7 +189,7 @@ class SemanticSearchResponseNode(ChatFlowNode):
                     
                     Add sources for the information you provide.
                     - Add all source urls for the documents that you used to answer the question at the bottom of the response in a list with a reference number.
-                    - The url should be clickable in an HTML format, e.g.,[ref number] the document title <a target="_blank" href="https://www.example.com">https://www.example.com</a>
+                    - The url should be clickable in an HTML format, e.g.,<a target="_blank" href="https://www.example.com">[ref number] the document title </a>
                     - Add the reference number for the source in the response where it was used.
 
                     Context Data:
