@@ -42,9 +42,11 @@ class LocationExtractNode(ChatFlowNode):
         chat_provider = get_chat_provider()
 
         prompt = f"""
-        
-                Extract the locations from the text that it appears the user and assistant are interested in.
-                - It should be a comma seperated list of the locations in single quotes.
+                Use you knowledge of the UK to identify the locations that the user and assistant are interested in.
+                - Extract the locations from the text that it appears the user and assistant are interested in.
+                - Only include the locations that are mentioned in the text.
+                - If the user appears to no longer be interested in the location, do NOT extract the location.
+                - It should be a comma seperated list of the locations.
                 - The content should not include start and end headers.
                 - It should be in a single line.
 
@@ -56,6 +58,8 @@ class LocationExtractNode(ChatFlowNode):
         ]
         response = chat_provider.complete_chat(messages)
         locations = response.content
+        print(f"Identified locations: {locations}")
+        print("-" * 50)
         chat_messages.add_flowdata(self.flowdata_key, locations)
 
         return chat_messages
@@ -142,9 +146,7 @@ def geometry_return(name_to_search: str) -> Dict[str, List]:
         if response.status_code == 200:
             # Parse the JSON response
             data = response.json()
-            #print(data)
-
-            
+            print(f"GIS Data for {name_to_search} [service: {number}] [url: {current_url}]: {data}")
 
             if "features" in data.keys() and len(data["features"]) > 0:
                 for feature in data["features"]:
