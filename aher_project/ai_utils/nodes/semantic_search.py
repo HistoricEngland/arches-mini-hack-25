@@ -188,7 +188,7 @@ class SemanticSearchResponseNode(ChatFlowNode):
                     - Do not refer the context data provided, answer as if it was coming from your own knowledge.
                     
                     Add sources for the information you provide.
-                    - Add all source urls for the documents that you used to answer the question at the bottom of the response in a list with a reference number.
+                    - Add all source urls for the documents that you used to answer the question at the bottom of the response in a bulleted list with a reference number.
                     - The url should be clickable in an HTML format, e.g.,<a target="_blank" href="https://www.example.com">[ref number] the document title </a>
                     - Add the reference number for the source in the response where it was used.
 
@@ -204,11 +204,12 @@ class SemanticSearchResponseNode(ChatFlowNode):
 
 
         chat_provider = get_chat_provider()
+        
         message_history_summary_excluding_latest_and_system = messages.messages[1:-1]
         # append the prompt to the message history
         message_history_summary_excluding_latest_and_system.append({"role": "user", "content": prompt})
 
-        response = chat_provider.complete_chat(message_history_summary_excluding_latest_and_system)
+        response = chat_provider.complete_chat(message_history_summary_excluding_latest_and_system,)
         
         # Add the response to the messages
         messages.messages.append({
