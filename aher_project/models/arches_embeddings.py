@@ -77,7 +77,8 @@ class TileEmbeddingDocument(models.Model):
                 aggregated[resource_id] = {
                     'order': 0, #cosine distance - lower is a closer match
                     'document': f"# Title: {embedding_doc.resourceinstance.displayname()}\n\n## Summary Description\n{embedding_doc.resourceinstance.displaydescription()}\n\n## Content\n",
-                    'document_source_url': f"{settings.PUBLIC_SERVER_ADDRESS}report/{str(embedding_doc.resourceinstance.resourceinstanceid)}"
+                    'document_source_url': f"http://localhost:8002/report/{str(embedding_doc.resourceinstance.resourceinstanceid)}" # TODO: replace with public server address
+                    #'document_source_url': f"{settings.PUBLIC_SERVER_ADDRESS}report/{str(embedding_doc.resourceinstance.resourceinstanceid)}"
                 }
             
             aggregated[resource_id]['document'] = f"{aggregated[resource_id]['document']}\n\n{embedding_doc.document}"
