@@ -89,9 +89,16 @@ class SemanticSearchSummarizeNode(ChatFlowNode):
 
     def llm_summarize_messages(self, rag_results: List[Dict[str, Any]]) -> str:
         """Summarize the messages using the LLM."""
-        
+        """
+        {
+            'order': 0.38,
+            'document': f"# Title: Excavation 1\n\n## Summary Description\nThis is the display description of the resource}\n\n## Content\n",
+            'document_source_url': "http://localhost:8002/report/12323-123-123-123"
+        }
+        """
+
         # put the rag_results into a multi-line string with ewach doc seperated by 3 line breaks
-        formatted_docs = "\n\n\n".join([doc["document"] for doc in rag_results])
+        formatted_docs = "\n\n\n".join([f"- Document: {doc['document']}\n   - Document Source: {doc['document_source_url']}" for doc in rag_results])
         
         return formatted_docs
 
@@ -170,8 +177,8 @@ class SemanticSearchResponseNode(ChatFlowNode):
         
         # Create prompt using semantic search results
         context = json.dumps(semantic_search_results, indent=2)
-        prompt = f"""Use the following context data from your database, along with the chat history, to answer the user's question.
-
+        prompt = f"""
+                    Use the following context data from your database, along with the chat history, to answer the user's question.
                     - Do NOT use any information outside of the context provided.
                     - If you don't have enough information to answer the question, you can say so.
                     - Do not mention you are an AI or provide any other information about the system.
@@ -179,6 +186,11 @@ class SemanticSearchResponseNode(ChatFlowNode):
                     - Simply answer the question based on the information provided.
                     - If the answer is not found in the context, answer as best you can with the data you've been provided without lhying or making up informaiton.
                     - Do not refer the context data provided, answer as if it was coming from your own knowledge.
+                    
+                    Add sources for the information you provide.
+                    - Add all source urls for the documents that you used to answer the question at the bottom of the response in a list with a reference number.
+                    - The url should be clickable in an HTML format, e.g.,[ref number] the document title <a target="_blank" href="https://www.example.com">https://www.example.com</a>
+                    - Add the reference number for the source in the response where it was used.
 
                     Context Data:
                     {context}

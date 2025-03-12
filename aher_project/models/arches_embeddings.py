@@ -75,13 +75,13 @@ class TileEmbeddingDocument(models.Model):
             
             if resource_id not in aggregated:
                 aggregated[resource_id] = {
-                    'order': 0, #embedding_doc.embedding__cosine_distance,
-                    'document': f"# Title: {embedding_doc.resourceinstance.displayname()}\n ## Summary Description: {embedding_doc.resourceinstance.displaydescription()}\n ## Content:",
-                    'document_source_url': f"{settings.PUBLIC_SERVER_ADDRESS}/report/{str(embedding_doc.resourceinstance.resourceinstanceid)}"
+                    'order': 0, #cosine distance - lower is a closer match
+                    'document': f"# Title: {embedding_doc.resourceinstance.displayname()}\n\n## Summary Description\n{embedding_doc.resourceinstance.displaydescription()}\n\n## Content\n",
+                    'document_source_url': f"{settings.PUBLIC_SERVER_ADDRESS}report/{str(embedding_doc.resourceinstance.resourceinstanceid)}"
                 }
             
             aggregated[resource_id]['document'] = f"{aggregated[resource_id]['document']}\n\n{embedding_doc.document}"
-            aggregated[resource_id]['order'] += embedding_doc.distance
+            aggregated[resource_id]['order'] = (aggregated[resource_id]['order'] + embedding_doc.distance)/2 # average the order
 
         # convert aggregate dict to list
         print(aggregated.values)
