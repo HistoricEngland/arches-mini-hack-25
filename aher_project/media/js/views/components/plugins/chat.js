@@ -2,8 +2,9 @@ define([
     'knockout',
     'jquery',
     'arches',
+    'marked',
     'templates/views/components/plugins/chat.htm'
-], function(ko, $, arches, chatPluginTemplate) {
+], function(ko, $, arches, marked, chatPluginTemplate) {
     return ko.components.register('chat', {
         viewModel: function(params) {
             var self = this;
@@ -11,6 +12,21 @@ define([
             this.messages = ko.observableArray([]);
             this.userInput = ko.observable('');
             this.loading = ko.observable(false);
+
+            // Configure marked.js options
+            marked.setOptions({
+                breaks: true, // Enable line breaks
+                gfm: true,    // Enable GitHub Flavored Markdown
+                tables: true  // Enable tables
+            });
+
+            // Format content with markdown if it's from the assistant
+            this.formatMessage = function(message) {
+                if (message.role === 'assistant') {
+                    return marked.parse(message.content);
+                }
+                return message.content;
+            };
 
             this.canSend = ko.computed(function() {
                 return !self.loading() && self.userInput().trim() !== '';
