@@ -178,7 +178,12 @@ class SemanticSearchResponseNode(ChatFlowNode):
         # Create prompt using semantic search results
         context = json.dumps(semantic_search_results, indent=2)
         prompt = f"""
-                    Use the following context data from your database, along with the chat history, to answer the user's question.
+                    He is some context data that you can use to answer the user's question.
+
+                    Context Data:
+                    {context}
+
+                    Use the context data which was retrieved from your database, along with the chat history, to answer the user's question.
                     - Do NOT use any information outside of the context provided.
                     - If you don't have enough information to answer the question, you can say so.
                     - Do not mention you are an AI or provide any other information about the system.
@@ -187,13 +192,13 @@ class SemanticSearchResponseNode(ChatFlowNode):
                     - If the answer is not found in the context, answer as best you can with the data you've been provided without lhying or making up informaiton.
                     - Do not refer the context data provided, answer as if it was coming from your own knowledge.
                     
-                    You MUST ALWAYS add sources for the information you provide.
+                    You MUST ALWAYS add references for the information you provide.
                     - Add all source urls for the documents that you used to answer the question at the bottom of the response in a bulleted list with a reference number.
                     - The url should be clickable in an HTML format, e.g.,<a target="_blank" href="https://www.example.com">[ref number] the document title </a>
                     - You MUST add the reference number for the source in the response where it was used to generate content.
 
-                    Context Data:
-                    {context}
+                    Use Markdown to format your response
+                    - Only use bold for sections rather than headers.
 
                     User's question: {last_user_message}
         """
