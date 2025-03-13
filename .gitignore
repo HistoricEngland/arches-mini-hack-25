@@ -16,3 +16,4 @@ CACHE
 doc_store
 private.env
 __pycache__
+.DS_Store
